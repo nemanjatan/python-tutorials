@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-WEBSITE_URL = "https://techcrunch.com/"
+WEBSITE_URL = "https://quotes.toscrape.com/"
 
 
 def get_website_content(url):
@@ -15,11 +15,15 @@ def get_website_content(url):
         print(f"An error occurred: {err}")
 
 
+def get_authors(content):
+    soup = BeautifulSoup(content, "html.parser")
+    authors = soup.find_all('small', class_='author')
+    return [author.get_text() for author in authors]
+
+
 if __name__ == '__main__':
     content = get_website_content(WEBSITE_URL)
     if content:
-        soup = BeautifulSoup(content, "html.parser")
-
-        headlines = soup.find_all('h2')
-        for headline in headlines:
-            print(headline.text.strip())
+        authors = get_authors(content)
+        for author in authors:
+            print(author)
